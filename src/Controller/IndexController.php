@@ -8,7 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Smarty\Smarty;
 
-class IndexController extends AbstractFrontController
+class IndexController
 {
     public function __construct(
         /*private ProductRepository $repository,
