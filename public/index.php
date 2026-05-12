@@ -7,6 +7,7 @@ use Laminas\Diactoros\Response\JsonResponse;
 use FastRoute\RouteCollector;
 use App\Factories\ControllerFactory;
 use Dotenv\Dotenv;
+use Smarty\Smarty;
 
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
@@ -21,6 +22,14 @@ foreach ($required as $key) {
         die;
     }
 }
+
+// инициализация смарти
+$smarty = new Smarty();
+
+$smarty->setTemplateDir(__DIR__ . '/../templates');
+$smarty->setCompileDir(__DIR__ . '/../templates_c');
+$smarty->setCacheDir(__DIR__ . '/../cache');
+$smarty->setConfigDir(__DIR__ . '/../configs');
 
 // Создание PSR-7 запроса
 $request = ServerRequestFactory::fromGlobals(
@@ -75,7 +84,7 @@ switch ($routeInfo[0]) {
         [$class, $method] = $routeInfo[1];
         $vars = $routeInfo[2];
 
-        $factory = new ControllerFactory($pdo);
+        $factory = new ControllerFactory($pdo, $smarty);
         $controller = $factory->create($class);
         $response = $controller->$method($request, $vars);
         break;

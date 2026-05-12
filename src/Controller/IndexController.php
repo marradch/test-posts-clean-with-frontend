@@ -6,18 +6,24 @@ namespace App\Controller;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Laminas\Diactoros\Response\HtmlResponse;
+use Smarty\Smarty;
 
 class IndexController extends AbstractFrontController
 {
     public function __construct(
         /*private ProductRepository $repository,
         private CategoryRepository $categoryRepository,*/
-    ) {}
+        private Smarty $smarty
+    ) {
+    }
 
     public function index(ServerRequestInterface $request): ResponseInterface
     {
         try {
-            $html = $this->render('index.php', []);
+            $this->smarty->assign('title', 'Мой сайт');
+            $this->smarty->assign('name', 'Марина');
+
+            $html = $this->smarty->fetch('home.tpl');
 
             return new HtmlResponse($html, 200);
 
