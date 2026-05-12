@@ -10,7 +10,8 @@ CREATE TABLE posts (
     title VARCHAR(255) NOT NULL,
     description TEXT,
     content LONGTEXT NOT NULL,
-    views INT UNSIGNED DEFAULT 0
+    views INT UNSIGNED DEFAULT 0,
+    published_at TIMESTAMP
 );
 
 CREATE TABLE post_category (
