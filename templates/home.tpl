@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Тестовый блог</title>
+    <link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
 
@@ -15,7 +16,7 @@
                     <img src="{$post.image}"/>
                 </div>
                 <p>{$post.title}</p>
-                <p>{$post.published_at}</p>
+                <p>{$post.published_at|date_format:"%d.%m.%Y"}</p>
                 <p>{$post.description}</p>
                 <a href="/post/{$post.id}">Читать полностью</a>
             </div>

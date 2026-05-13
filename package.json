@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "build:css": "sass assets/scss/app.scss public/css/app.css",
+    "watch:css": "sass --watch assets/scss:public/css --style=compressed"
+  }
+}
