@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\Diactoros\ServerRequestFactory;
 use Laminas\Diactoros\Response\JsonResponse;
 use FastRoute\RouteCollector;
@@ -56,12 +57,18 @@ $uri = rawurldecode($uri);
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 switch ($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
-        $response = new JsonResponse(['error' => 'Not Found'], 404);
+        $response = new HtmlResponse(
+            '<h1>Error</h1><p>Not Found</p>',
+            404
+        );
         break;
 
     case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
         $allowedMethods = $routeInfo[1];
-        $response = new JsonResponse(['error' => 'Method Not Allowed'], 405);
+        $response = new HtmlResponse(
+            '<h1>Error</h1><p>Method Not Allowed</p>',
+            405
+        );
         break;
 
     case FastRoute\Dispatcher::FOUND:

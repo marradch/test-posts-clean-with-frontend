@@ -19,6 +19,7 @@ class CategoryRepository
                     p.id AS post_id,
                     p.title,
                     p.published_at,
+                    p.image,
                     LEFT(p.content, 120) AS short_description,
                     ROW_NUMBER() OVER (
                         PARTITION BY c.id
@@ -53,6 +54,7 @@ class CategoryRepository
                 'title' => $raw_item['title'],
                 'published_at' => $raw_item['published_at'],
                 'description' => $raw_item['short_description'],
+                'image' => $raw_item['image'],
             ];
         }
 

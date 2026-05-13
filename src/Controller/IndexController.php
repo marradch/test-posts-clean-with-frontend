@@ -21,8 +21,8 @@ class IndexController
         try {
             $categoriesData = $this->categoryRepository->getAllWithActualPosts();
 
-            echo '<pre>'; var_dump($categoriesData); die;
-            $html = $this->smarty->fetch('home.tpl');
+            //echo '<pre>'; var_dump($categoriesData); die;
+            $html = $this->smarty->fetch('home.tpl', ['categoriesData' => $categoriesData]);
 
             return new HtmlResponse($html, 200);
 
