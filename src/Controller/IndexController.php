@@ -82,6 +82,12 @@ class IndexController
             $perPage = 2;
 
             $category = $this->categoryRepository->findCategoryById($id);
+            if(!$category) {
+                return new HtmlResponse(
+                    '<h1>Error</h1><p>Not Found</p>',
+                    404
+                );
+            }
             $postsData = $this->categoryRepository->getAllPostsByCategory($id, $page, $perPage, $sort);
 
             $html = $this->smarty->fetch('category.tpl', [
