@@ -84,7 +84,13 @@ class IndexController
             $category = $this->categoryRepository->findCategoryById($id);
             $postsData = $this->categoryRepository->getAllPostsByCategory($id, $page, $perPage, $sort);
 
-            $html = $this->smarty->fetch('category.tpl', ['category' => $category, 'posts' => $postsData['posts'], 'pagesCount' => $postsData['pagesCount'], 'currentPage' => $page]);
+            $html = $this->smarty->fetch('category.tpl', [
+                'category' => $category,
+                'posts' => $postsData['posts'],
+                'pagesCount' => $postsData['pagesCount'],
+                'currentPage' => $page,
+                'sort' => $sort
+            ]);
 
             return new HtmlResponse($html, 200);
 
