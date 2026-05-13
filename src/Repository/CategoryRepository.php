@@ -108,7 +108,7 @@ class CategoryRepository
         $ids = implode(",", array_column(  $result['categories'], 'id'));
 
         $stmt = $this->pdo->prepare("
-            SELECT p.title, LEFT(p.content, 120) AS short_description, p.published_at, p.image
+            SELECT p.id, p.title, LEFT(p.content, 120) AS short_description, p.published_at, p.image
             FROM posts p
             LEFT JOIN post_category pc ON p.id = pc.post_id            
             WHERE category_id IN ($ids) AND p.id != :id
@@ -121,8 +121,9 @@ class CategoryRepository
 
         foreach ($rawSimilarResult as $rawSimilarResultItem) {
             $result['similar'][] = [
+                'id' => $rawSimilarResultItem['id'],
                 'title' => $rawSimilarResultItem['title'],
-                'short_description' => $rawSimilarResultItem['short_description'],
+                'description' => $rawSimilarResultItem['short_description'],
                 'published_at' => $rawSimilarResultItem['published_at'],
                 'image' => $rawSimilarResultItem['image'],
             ];

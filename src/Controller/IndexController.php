@@ -47,7 +47,7 @@ class IndexController
 
 			$this->categoryRepository->updateViewsCount($id);
 			$postData = $this->categoryRepository->findPostByIdWithSimilar($id);
-			echo '<pre>'; var_dump($postData); die;
+			$html = $this->smarty->fetch('post.tpl', ['postData' => $postData]);
 
 			return new HtmlResponse($html, 200);
 
