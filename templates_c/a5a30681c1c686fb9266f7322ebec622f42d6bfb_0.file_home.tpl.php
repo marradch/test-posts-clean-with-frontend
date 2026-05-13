@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-05-13 09:15:15
+/* Smarty version 5.8.0, created on 2026-05-13 09:53:22
   from 'file:home.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_6a044123078dd1_73579737',
+  'unifunc' => 'content_6a044a12d5fcb1_86117797',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'a5a30681c1c686fb9266f7322ebec622f42d6bfb' => 
     array (
       0 => 'home.tpl',
-      1 => 1778663714,
+      1 => 1778665999,
       2 => 'file',
     ),
   ),
@@ -20,12 +20,13 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6a044123078dd1_73579737 (\Smarty\Template $_smarty_tpl) {
+function content_6a044a12d5fcb1_86117797 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/var/www/html/templates';
 ?><!DOCTYPE html>
 <html>
 <head>
     <title>Тестовый блог</title>
+    <link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
 
@@ -53,7 +54,7 @@ $foreach1DoElse = false;
                 </div>
                 <p><?php echo $_smarty_tpl->getValue('post')['title'];?>
 </p>
-                <p><?php echo $_smarty_tpl->getValue('post')['published_at'];?>
+                <p><?php echo $_smarty_tpl->getSmarty()->getModifierCallback('date_format')($_smarty_tpl->getValue('post')['published_at'],"%d.%m.%Y");?>
 </p>
                 <p><?php echo $_smarty_tpl->getValue('post')['description'];?>
 </p>
