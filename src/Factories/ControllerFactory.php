@@ -3,7 +3,7 @@
 namespace App\Factories;
 
 use App\Controller\IndexController;
-//use App\Repository\{ProductRepository,CategoryRepository};
+use App\Repository\CategoryRepository;
 use Smarty\Smarty;
 
 class ControllerFactory
@@ -21,9 +21,8 @@ class ControllerFactory
     {
         return match ($class) {
             IndexController::class => new IndexController(
-                $this->smarty
-                /*new ProductRepository($this->pdo),
-                new CategoryRepository($this->pdo),*/
+                $this->smarty,
+                new CategoryRepository($this->pdo)
             ),
             default => throw new \RuntimeException("Unknown controller $class"),
         };

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-//use App\Repository\{CategoryRepository,ProductRepository};
+use App\Repository\CategoryRepository;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Laminas\Diactoros\Response\HtmlResponse;
@@ -11,18 +11,17 @@ use Smarty\Smarty;
 class IndexController
 {
     public function __construct(
-        /*private ProductRepository $repository,
-        private CategoryRepository $categoryRepository,*/
-        private Smarty $smarty
+        private Smarty $smarty,
+        private CategoryRepository $categoryRepository
     ) {
     }
 
     public function index(ServerRequestInterface $request): ResponseInterface
     {
         try {
-            $this->smarty->assign('title', 'Мой сайт');
-            $this->smarty->assign('name', 'Марина');
+            $categoriesData = $this->categoryRepository->getAllWithActualPosts();
 
+            echo '<pre>'; var_dump($categoriesData); die;
             $html = $this->smarty->fetch('home.tpl');
 
             return new HtmlResponse($html, 200);
