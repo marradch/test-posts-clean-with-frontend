@@ -131,4 +131,16 @@ class CategoryRepository
 
         return $result;
     }
+
+    public function findCategoryById(int $id): ?array
+    {
+        $stmt = $this->pdo->prepare("
+                SELECT c.name as title, c.description
+                FROM categories c
+                WHERE c.id = :id
+            ");
+        $stmt->execute(['id' => $id]);
+
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
 }
