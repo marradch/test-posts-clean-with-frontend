@@ -44,6 +44,7 @@ $request = ServerRequestFactory::fromGlobals(
 // Настройка маршрутов
 $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('GET', '/', ['App\Controller\IndexController', 'index']);
+    $r->addRoute('GET', '/post/{id:\d+}', ['App\Controller\IndexController', 'showPost']);
 });
 
 // Парсинг URL

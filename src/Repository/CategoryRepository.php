@@ -60,4 +60,74 @@ class CategoryRepository
 
         return $result;
     }
+
+    public function updateViewsCount(int $postId): void
+    {
+        $stmt = $this->pdo->prepare("
+            UPDATE posts
+            SET views = views + 1
+            WHERE id = :id;
+        ");
+        $stmt->execute(['id' => $postId]);
+    }
+
+    public function findPostByIdWithSimilar(int $id): ?array
+    {
+        $stmt = $this->pdo->prepare("
+            SELECT p.title, p.description, p.content, p.image, p.published_at,
+                   c.name AS category_title, c.id as category_id
+            FROM posts p
+            LEFT JOIN post_category pc ON p.id = pc.post_id
+            LEFT JOIN categories c ON c.id = pc.category_id
+            WHERE p.id = :id
+        ");
+        $stmt->execute(['id' => $id]);
+        $rawResult = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        if (!$rawResult) {
+            return null;
+        }
+
+        $result = [];
+
+        foreach ($rawResult as $rawResultItem) {
+            if (!isset($result['title'])) {
+                $result['title'] = $rawResultItem['title'];
+                $result['description'] = $rawResultItem['description'];
+                $result['content'] = $rawResultItem['content'];
+                $result['image'] = $rawResultItem['image'];
+                $result['published_at'] = $rawResultItem['published_at'];
+            }
+
+            $result['categories'][] = [
+                'id' => $rawResultItem['category_id'],
+                'title' => $rawResultItem['category_title'],
+            ];
+        }
+
+        $ids = implode(",", array_column(  $result['categories'], 'id'));
+
+        $stmt = $this->pdo->prepare("
+            SELECT p.title, LEFT(p.content, 120) AS short_description, p.published_at, p.image
+            FROM posts p
+            LEFT JOIN post_category pc ON p.id = pc.post_id            
+            WHERE category_id IN ($ids) AND p.id != :id
+            ORDER BY p.published_at DESC
+            LIMIT 3
+        ");
+
+        $stmt->execute(['id' => $id]);
+        $rawSimilarResult = $stmt->fetchALL(\PDO::FETCH_ASSOC);
+
+        foreach ($rawSimilarResult as $rawSimilarResultItem) {
+            $result['similar'][] = [
+                'title' => $rawSimilarResultItem['title'],
+                'short_description' => $rawSimilarResultItem['short_description'],
+                'published_at' => $rawSimilarResultItem['published_at'],
+                'image' => $rawSimilarResultItem['image'],
+            ];
+        }
+
+        return $result;
+    }
 }
