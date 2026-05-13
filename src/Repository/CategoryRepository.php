@@ -135,7 +135,7 @@ class CategoryRepository
     public function findCategoryById(int $id): ?array
     {
         $stmt = $this->pdo->prepare("
-                SELECT c.name as title, c.description
+                SELECT c.id, c.name as title, c.description
                 FROM categories c
                 WHERE c.id = :id
             ");
@@ -143,4 +143,41 @@ class CategoryRepository
 
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
+
+    public function getAllPostsByCategory(int $categoryId, int $page = 1, int $perPage = 2, string $sort = 'published_at'): ?array
+	{
+		if (!in_array($sort, ['views', 'published_at'])) {
+			throw new \Exception('Wrong sort');
+		}
+
+		$offset = ($page - 1) * $perPage;
+
+		$query = "
+			SELECT p.id, p.title, LEFT(p.content, 120) AS description, p.published_at, p.image
+			FROM posts p
+			JOIN post_category pc ON pc.post_id = p.id AND pc.category_id = :category_id
+			ORDER BY p.{$sort} DESC
+			LIMIT $offset, $perPage 
+		";
+
+		$stmt = $this->pdo->prepare($query);
+		$stmt->execute(['category_id' => $categoryId]);
+		$posts = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+		$query = "
+			SELECT COUNT(*) as count
+			FROM posts p
+			JOIN post_category pc ON pc.post_id = p.id AND pc.category_id = :category_id
+		";
+
+		$stmt = $this->pdo->prepare($query);
+		$stmt->execute(['category_id' => $categoryId]);
+		$count = $stmt->fetch(\PDO::FETCH_ASSOC)['count'] ?? 0;
+		$pagesCount = ceil($count / $perPage);
+
+		return [
+			'posts' => $posts,
+			'pagesCount' => $pagesCount
+		];
+	}
 }

@@ -24,3 +24,18 @@
     display: block;
   }
 }
+
+.pagination {
+  display: flex;
+  gap: 5px;
+  margin-top: 20px;
+  a {
+    border: 1px solid gray;
+    border-radius: 6px;
+    padding: 5px;
+    text-decoration: none;
+    &.active {
+      border: none;
+    }
+  }
+}

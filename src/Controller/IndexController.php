@@ -77,8 +77,14 @@ class IndexController
                 );
             }
 
+            $page = (int)($request->getQueryParams()['page'] ?? 1);
+            $sort = ($request->getQueryParams()['sort'] ?? 'published_at');
+            $perPage = 2;
+
             $category = $this->categoryRepository->findCategoryById($id);
-            $html = $this->smarty->fetch('category.tpl', ['category' => $category]);
+            $postsData = $this->categoryRepository->getAllPostsByCategory($id, $page, $perPage, $sort);
+
+            $html = $this->smarty->fetch('category.tpl', ['category' => $category, 'posts' => $postsData['posts'], 'pagesCount' => $postsData['pagesCount'], 'currentPage' => $page]);
 
             return new HtmlResponse($html, 200);
 
